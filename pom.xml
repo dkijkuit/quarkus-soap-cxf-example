@@ -35,6 +35,18 @@
       <artifactId>quarkus-arc</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-main</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-direct</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-bean</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.quarkiverse.cxf</groupId>
       <artifactId>quarkus-cxf</artifactId>
       <version>0.5</version>
@@ -62,6 +74,33 @@
               <goal>build</goal>
               <goal>generate-code</goal>
               <goal>generate-code-tests</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <version>3.4.2</version>
+        <executions>
+          <execution>
+            <id>generate-sources-wsdl</id>
+            <phase>generate-sources</phase>
+            <configuration>
+              <defaultOptions>
+                <frontEnd>jaxws21</frontEnd>
+              </defaultOptions>
+              <wsdlOptions>
+                <wsdlOption>
+                  <wsdl>./src/main/resources/wsdl/CustomerService.wsdl</wsdl>
+                  <bindingFiles>
+                    <bindingFile>./src/main/resources/wsdl/binding.xml</bindingFile>
+                  </bindingFiles>
+                </wsdlOption>
+              </wsdlOptions>
+            </configuration>
+            <goals>
+              <goal>wsdl2java</goal>
             </goals>
           </execution>
         </executions>
