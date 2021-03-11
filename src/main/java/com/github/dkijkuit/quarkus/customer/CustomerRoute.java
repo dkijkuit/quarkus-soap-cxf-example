@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class CustomerRoute extends RouteBuilder {
     @Inject
-    @Named("customerListBean")
-    List<Customer> customerList;
+    @Named("customersHolderBean")
+    CustomersHolder customersHolder;
 
     @Override
     public void configure() throws Exception {
@@ -28,7 +28,7 @@ public class CustomerRoute extends RouteBuilder {
                 .end();
 
         from("direct:save-customer")
-                .bean("customerListBean", "add(${body})")
+                .bean("customersHolderBean", "saveCustomer")
                 .end();
 
         from("direct:get-customers-by-name")
@@ -38,15 +38,15 @@ public class CustomerRoute extends RouteBuilder {
 
     private void filterCustomersByName(Exchange exchange) {
         String nameFilter = exchange.getMessage().getBody(String.class);
-        final List<Customer> customerFilteredList = this.customerList.stream()
+        final List<Customer> customerList = this.customersHolder.stream()
                 .filter(customer -> customer.getName().toLowerCase().contains(nameFilter.toLowerCase()))
                 .collect(Collectors.toList());
-        exchange.getMessage().setBody(customerFilteredList);
+        exchange.getMessage().setBody(customerList);
     }
 
     void getAllCustomersResponse(Exchange exchange) {
         GetAllCustomersResponse allCustomersResponse = new GetAllCustomersResponse();
-        allCustomersResponse.getReturn().addAll(customerList);
+        allCustomersResponse.getReturn().addAll(customersHolder);
         exchange.getMessage().setBody(allCustomersResponse);
     }
 }

@@ -9,15 +9,13 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 public class CustomerResource {
     @Singleton
-    @Named("customerListBean")
-    public List<Customer> customerList() throws DatatypeConfigurationException {
+    @Named("customersHolderBean")
+    public CustomersHolder customersHolder() throws DatatypeConfigurationException {
         Customer customer = new Customer();
         customer.setName("Michael Knight");
         customer.setNumOrders(45);
@@ -42,6 +40,6 @@ public class CustomerResource {
         xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         customer2.setBirthDate(xmlGregorianCalendar);
 
-        return new ArrayList<>(Arrays.asList(customer, customer2));
+        return new CustomersHolder(Arrays.asList(customer, customer2));
     }
 }
