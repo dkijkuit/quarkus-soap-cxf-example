@@ -54,4 +54,11 @@ public class Fruit {
     public int hashCode() {
         return Objects.hash(this.getName());
     }
+
+    @Override
+    public String toString() {
+        return "Fruit{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

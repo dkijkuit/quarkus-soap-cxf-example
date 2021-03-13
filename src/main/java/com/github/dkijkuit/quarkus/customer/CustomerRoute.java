@@ -24,6 +24,7 @@ public class CustomerRoute extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("direct:get-all-customers")
+                .routeId("get-all-customers")
                 .process(this::getAllCustomersResponse)
                 .end();
 
@@ -33,6 +34,16 @@ public class CustomerRoute extends RouteBuilder {
 
         from("direct:get-customers-by-name")
                 .process(this::filterCustomersByName)
+                .end();
+
+        /**
+         * This webservice client route calls it's own webservice as if it was hosted somewhere else
+         */
+        from("timer://customertimer?fixedRate=true&period=5000")
+                .bean("customerServiceClient", "getAllCustomers")
+                .setBody(simple("${body.getReturn}"))
+                .split(body())
+                .log("Timer test route for customer service, current customer list: ${body.name}")
                 .end();
     }
 
